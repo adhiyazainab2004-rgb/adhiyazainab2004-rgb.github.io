@@ -1,0 +1,1146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Ducky Pwn Docs — Local-First Security Reporting (Alternative to Dradis Framework)</title>
+  <meta name="description" content="Ducky Pwn Docs is a local-first security reporting and intelligence workspace for red teamers, bug bounty hunters, and consultants. Offline Electron app with SQLite vault, evidence capture, and PDF/HTML/DOCX deliverables — an alternative to Dradis Framework." />
+  <meta name="keywords" content="Ducky Pwn Docs, vulnerability management, security reporting, pentest reporting, bug bounty reporting, red team reporting, evidence capture, offline reporting, Electron, SQLite, PDF report, DOCX report, HTML report, Dradis alternative, alternative for Dradis framework" />
+  <meta name="author" content="AATHILDUCKY" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://example.com/ducky-pwn-docs" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Ducky Pwn Docs — Local-First Security Reporting (Alternative to Dradis Framework)" />
+  <meta property="og:description" content="Offline security reporting workspace: findings → evidence → reports → email delivery. SQLite vault, Markdown notes, and professional PDF/HTML/DOCX deliverables." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+  <meta property="og:image:alt" content="Ducky Pwn Docs banner" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Ducky Pwn Docs — Local-First Security Reporting (Alternative to Dradis Framework)" />
+  <meta name="twitter:description" content="Offline pentest reporting workspace with SQLite vault, evidence capture, and PDF/HTML/DOCX deliverables." />
+  <meta name="twitter:image" content="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+
+  <!-- Theme color -->
+  <meta name="theme-color" content="#f8fafc" />
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Icons (CDN) -->
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+
+  <!-- Animations (CDN) -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js" defer></script>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
+  <!-- Fonts (CDN) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="https://raw.githubusercontent.com/AATHILDUCKY/my-assets/refs/heads/main/ducky-pwn-docs.webp">
+
+  <!-- JSON-LD structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Ducky Pwn Docs",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Windows, Linux, macOS",
+    "description": "Local-first security reporting and intelligence workspace built with Electron + React/Vite, backed by SQLite. Designed for fast, private report authoring, evidence capture, and deliverables generation — all offline. An alternative to Dradis Framework.",
+    "license": "https://opensource.org/licenses/MIT",
+    "author": {
+      "@type": "Person",
+      "name": "AATHILDUCKY"
+    },
+    "image": "https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root { color-scheme: light; }
+    html, body { font-family: "DM Sans", system-ui, -apple-system, Segoe UI, sans-serif; }
+    h1, h2, h3, .display { font-family: "Space Grotesk", "DM Sans", system-ui, sans-serif; letter-spacing: -0.02em; }
+    /* Lightweight animated gradient background (no heavy libraries) */
+    .bg-animated {
+      background:
+        radial-gradient(1200px circle at 12% 8%, rgba(14,116,144,0.20), transparent 55%),
+        radial-gradient(900px circle at 85% 25%, rgba(14,165,233,0.18), transparent 55%),
+        radial-gradient(1000px circle at 30% 95%, rgba(245,158,11,0.16), transparent 55%),
+        linear-gradient(180deg, #ffffff 0%, #f6f9fc 45%, #ffffff 100%);
+      background-size: 120% 120%;
+      animation: drift 14s ease-in-out infinite alternate;
+    }
+    @keyframes drift {
+      0% { background-position: 0% 0%, 100% 30%, 40% 100%, 50% 50%; }
+      100% { background-position: 20% 10%, 80% 10%, 60% 90%, 50% 50%; }
+    }
+    /* Subtle glass effect */
+    .glass {
+      background: rgba(255,255,255,0.68);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    /* Soft grid overlay */
+    .grid-overlay {
+      background-image:
+        linear-gradient(to right, rgba(15,23,42,0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15,23,42,0.05) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(circle at 50% 20%, rgba(0,0,0,0.9), transparent 70%);
+      -webkit-mask-image: radial-gradient(circle at 50% 20%, rgba(0,0,0,0.9), transparent 70%);
+    }
+    /* Subtle noise */
+    .noise {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+    /* Nice focus outline */
+    .focus-ring:focus { outline: none; box-shadow: 0 0 0 4px rgba(14,116,144,0.25); }
+    /* Smooth anchor offset */
+    section { scroll-margin-top: 90px; }
+  </style>
+</head>
+
+<body class="bg-animated text-slate-800 antialiased">
+  <!-- Decorative overlay -->
+  <div class="pointer-events-none fixed inset-0 grid-overlay opacity-40"></div>
+  <div class="pointer-events-none fixed inset-0 noise opacity-30"></div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
+      <div class="glass border border-slate-200/70 rounded-2xl shadow-sm">
+        <div class="flex items-center justify-between px-4 sm:px-6 py-3">
+          <a href="#top" class="flex items-center gap-3 group">
+            <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-sky-500 to-teal-400 shadow-sm grid place-items-center">
+              <i data-lucide="shield" class="h-5 w-5 text-white"></i>
+            </div>
+            <div class="leading-tight">
+              <div class="font-extrabold tracking-tight text-slate-900 group-hover:text-sky-700 transition">Ducky Pwn Docs</div>
+              <div class="text-xs text-slate-600">Local-first security reporting workspace</div>
+            </div>
+          </a>
+
+          <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-700">
+            <a href="#features" class="hover:text-sky-700 transition">Features</a>
+            <a href="#demos" class="hover:text-sky-700 transition">Demos</a>
+            <a href="#downloads" class="downloadTrigger hover:text-sky-700 transition">Downloads</a>
+            <a href="#docs" class="hover:text-sky-700 transition">Docs</a>
+            <a href="#security" class="hover:text-sky-700 transition">Security</a>
+            <a href="#roadmap" class="hover:text-sky-700 transition">Roadmap</a>
+          </nav>
+
+          <div class="flex items-center gap-2">
+            <a href="#downloads" class="downloadTrigger focus-ring inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-slate-800 transition">
+              <i data-lucide="download" class="h-4 w-4"></i>
+              Download
+            </a>
+            <a href="https://github.com/dradis/dradis-ce"
+               target="_blank" rel="noreferrer"
+               class="focus-ring hidden sm:inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white/70 px-4 py-2 text-sm font-semibold text-slate-800 hover:border-slate-300 hover:bg-white transition">
+              <i data-lucide="external-link" class="h-4 w-4"></i>
+              Dradis (ref)
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="relative">
+    <!-- Hero -->
+    <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-8 sm:pb-8">
+      <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-12 items-start">
+        <div data-aos="fade-up" data-aos-duration="700">
+          <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700">
+            <span class="h-2 w-2 rounded-full bg-teal-500"></span>
+            Offline • Local-first • SQLite-backed
+          </div>
+
+          <h1 class="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
+            A private reporting workspace for
+            <span class="bg-gradient-to-r from-sky-600 to-teal-500 bg-clip-text text-transparent">findings → evidence → reports</span>
+          </h1>
+
+          <p class="mt-4 text-lg text-slate-700 leading-relaxed">
+            <span class="font-semibold text-slate-900">Ducky Pwn Docs</span> is a desktop app for red teamers, bug bounty hunters,
+            and security consultants who want a clean, fast workflow on their own machine.
+            Built with Electron + React/Vite and backed by SQLite.
+            <span class="font-semibold">An alternative for Dradis Framework</span> when you want local-first speed and privacy.
+          </p>
+
+          <div class="mt-6 flex flex-col sm:flex-row gap-3">
+            <a href="#downloads" class="downloadTrigger focus-ring inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-600 to-teal-500 px-5 py-3 text-sm font-bold text-white shadow-md hover:opacity-95 transition">
+              <i data-lucide="rocket" class="h-4 w-4"></i>
+              Get the desktop builds
+            </a>
+            <a href="#docs"
+               class="focus-ring inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white/70 px-5 py-3 text-sm font-bold text-slate-900 shadow-sm hover:bg-white transition">
+              <i data-lucide="book-open" class="h-4 w-4"></i>
+              Run locally (dev)
+            </a>
+          </div>
+
+          <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="glass rounded-2xl border border-slate-200/70 p-4">
+              <div class="text-xs text-slate-600">Storage</div>
+              <div class="mt-1 font-bold text-slate-900">SQLite vault</div>
+            </div>
+            <div class="glass rounded-2xl border border-slate-200/70 p-4">
+              <div class="text-xs text-slate-600">Reports</div>
+              <div class="mt-1 font-bold text-slate-900">PDF / HTML / DOCX</div>
+            </div>
+            <div class="glass rounded-2xl border border-slate-200/70 p-4">
+              <div class="text-xs text-slate-600">Evidence</div>
+              <div class="mt-1 font-bold text-slate-900">Images + videos</div>
+            </div>
+            <div class="glass rounded-2xl border border-slate-200/70 p-4">
+              <div class="text-xs text-slate-600">Mode</div>
+              <div class="mt-1 font-bold text-slate-900">Offline-ready</div>
+            </div>
+          </div>
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="100" data-aos-duration="700" class="space-y-4">
+          <div class="glass rounded-3xl border border-slate-200/70 shadow-lg overflow-hidden">
+            <div class="relative">
+              <img
+                src="https://raw.githubusercontent.com/AATHILDUCKY/my-assets/refs/heads/main/ducky-pwn-docs.webp"
+                alt="Ducky Pwn Docs banner"
+                class="w-full h-auto"
+                decoding="async"
+                fetchpriority="high"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-transparent"></div>
+            </div>
+            <div class="p-5 sm:p-6">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <div class="font-extrabold text-slate-900">Local-first. Professional deliverables.</div>
+                  <div class="mt-1 text-sm text-slate-600">Designed for fast report authoring and evidence capture.</div>
+                </div>
+                <div class="hidden sm:flex items-center gap-2">
+                  <span class="inline-flex items-center gap-1 rounded-full bg-teal-50 text-teal-700 border border-teal-200 px-3 py-1 text-xs font-semibold">
+                    <i data-lucide="lock" class="h-3.5 w-3.5"></i> Private
+                  </span>
+                  <span class="inline-flex items-center gap-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200 px-3 py-1 text-xs font-semibold">
+                    <i data-lucide="cpu" class="h-3.5 w-3.5"></i> Offline
+                  </span>
+                </div>
+              </div>
+
+              <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Electron</span>
+                <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">React + Vite</span>
+                <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">SQLite</span>
+                <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Markdown editor</span>
+                <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">SMTP delivery</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="glass rounded-3xl border border-slate-200/70 shadow-sm p-5">
+              <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Workflow</div>
+              <div class="mt-1 font-extrabold text-slate-900">From recon notes to client-ready exports</div>
+              <div class="mt-3 text-xs text-slate-600">Structured findings, inline evidence, and fast templates.</div>
+            </div>
+            <div class="glass rounded-3xl border border-slate-200/70 shadow-sm p-5">
+              <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Confidence</div>
+              <div class="mt-1 font-extrabold text-slate-900">Private by default, offline-ready</div>
+              <div class="mt-3 flex flex-wrap gap-2 text-xs">
+                <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Local vault</span>
+                <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">No cloud</span>
+                <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Audit-ready</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-600">
+            Tip: host this page on GitHub Pages / Netlify for a clean download portal later.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust / Highlights -->
+    <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-8">
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up">
+          <div class="flex items-center gap-3">
+            <div class="h-11 w-11 rounded-2xl bg-sky-50 border border-sky-100 grid place-items-center">
+              <i data-lucide="zap" class="h-5 w-5 text-sky-700"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Fast workflow</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700 leading-relaxed">
+            Smooth path from finding creation to polished deliverables — built for speed and focus.
+          </p>
+          <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
+            <div class="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 font-semibold text-slate-700">Template-ready</div>
+            <div class="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 font-semibold text-slate-700">Batch exports</div>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up" data-aos-delay="80">
+          <div class="flex items-center gap-3">
+            <div class="h-11 w-11 rounded-2xl bg-teal-50 border border-teal-100 grid place-items-center">
+              <i data-lucide="database" class="h-5 w-5 text-teal-700"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Local vault</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700 leading-relaxed">
+            SQLite database stored in your user data directory — no cloud dependency required.
+          </p>
+          <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
+            <div class="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 font-semibold text-slate-700">Project scoped</div>
+            <div class="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 font-semibold text-slate-700">Offline native</div>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up" data-aos-delay="160">
+          <div class="flex items-center gap-3">
+            <div class="h-11 w-11 rounded-2xl bg-amber-50 border border-amber-100 grid place-items-center">
+              <i data-lucide="file-text" class="h-5 w-5 text-amber-700"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Pro outputs</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700 leading-relaxed">
+            Generate PDF/HTML/DOCX deliverables and email findings via SMTP with attachments.
+          </p>
+          <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
+            <div class="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 font-semibold text-slate-700">Client-ready</div>
+            <div class="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 font-semibold text-slate-700">Email send</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Demos -->
+    <section id="demos" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div data-aos="fade-up">
+          <h2 class="text-3xl font-extrabold tracking-tight text-slate-900">Product demos</h2>
+          <p class="mt-2 text-slate-700">
+            Quick walkthroughs of the reporting flow and evidence capture inside the app.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Local-first</span>
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Evidence</span>
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Exports</span>
+          </div>
+        </div>
+        <div class="text-xs text-slate-600" data-aos="fade-up" data-aos-delay="80">
+          Tip: videos are local and load fast — no external embeds.
+        </div>
+      </div>
+
+      <div class="mt-6 relative" data-aos="fade-up" data-aos-delay="120">
+        <div class="glass rounded-3xl border border-slate-200/70 shadow-sm overflow-hidden">
+          <div id="videoTrack" class="flex transition-transform duration-500 ease-out">
+            <div class="videoSlide min-w-full p-4 sm:p-6">
+              <div class="rounded-2xl border border-slate-200 bg-white/70 p-4">
+                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Editor flow</div>
+                <div class="mt-1 text-lg font-extrabold text-slate-900">Create findings, add evidence, export</div>
+                <div class="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-slate-900">
+                  <video class="w-full h-auto" controls preload="metadata" playsinline>
+                    <source src="editor.webm" type="video/webm">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+            </div>
+            <div class="videoSlide min-w-full p-4 sm:p-6">
+              <div class="rounded-2xl border border-slate-200 bg-white/70 p-4">
+                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Report view</div>
+                <div class="mt-1 text-lg font-extrabold text-slate-900">Preview deliverables with clean layouts</div>
+                <div class="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-slate-900">
+                  <video class="w-full h-auto" controls preload="metadata" playsinline>
+                    <source src="report%20view.webm" type="video/webm">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <button id="videoPrev" type="button" class="focus-ring inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white/70 px-4 py-2 text-sm font-bold text-slate-900 hover:bg-white transition">
+              <i data-lucide="chevron-left" class="h-4 w-4"></i> Prev
+            </button>
+            <button id="videoNext" type="button" class="focus-ring inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white/70 px-4 py-2 text-sm font-bold text-slate-900 hover:bg-white transition">
+              Next <i data-lucide="chevron-right" class="h-4 w-4"></i>
+            </button>
+          </div>
+          <div class="flex items-center gap-2">
+            <button data-video-dot="0" aria-label="Show editor demo" class="videoDot h-2.5 w-2.5 rounded-full bg-slate-300 transition"></button>
+            <button data-video-dot="1" aria-label="Show report demo" class="videoDot h-2.5 w-2.5 rounded-full bg-slate-300 transition"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex items-end justify-between gap-4">
+        <div data-aos="fade-up">
+          <h2 class="text-3xl font-extrabold tracking-tight text-slate-900">Key features</h2>
+          <p class="mt-2 text-slate-700">
+            Everything you need for a clean reporting workflow — fully offline and local-first.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Vault</span>
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Reporting</span>
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Evidence</span>
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Operations</span>
+          </div>
+        </div>
+        <a href="#docs" class="hidden md:inline-flex items-center gap-2 text-sm font-bold text-sky-700 hover:text-sky-800 transition" data-aos="fade-up">
+          See dev setup <i data-lucide="arrow-right" class="h-4 w-4"></i>
+        </a>
+      </div>
+
+      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Feature cards -->
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-2xl bg-slate-50 border border-slate-200 grid place-items-center">
+              <i data-lucide="vault" class="h-5 w-5 text-slate-900"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Project Vault</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700">Organize clients, targets, and findings per project with a clean workspace.</p>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up" data-aos-delay="60">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-2xl bg-slate-50 border border-slate-200 grid place-items-center">
+              <i data-lucide="alert-triangle" class="h-5 w-5 text-slate-900"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Finding Management</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700">Severity, CVSS, assets, descriptions, and custom fields for structured reporting.</p>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up" data-aos-delay="120">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-2xl bg-slate-50 border border-slate-200 grid place-items-center">
+              <i data-lucide="notebook-pen" class="h-5 w-5 text-slate-900"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Markdown Notes</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700">Rich editor for tactical notes, methodologies, and checklists.</p>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-2xl bg-slate-50 border border-slate-200 grid place-items-center">
+              <i data-lucide="paperclip" class="h-5 w-5 text-slate-900"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Evidence Attachments</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700">Attach images and videos with inline preview for clean evidence trails.</p>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up" data-aos-delay="60">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-2xl bg-slate-50 border border-slate-200 grid place-items-center">
+              <i data-lucide="files" class="h-5 w-5 text-slate-900"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Deliverables</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700">Generate professional PDF / HTML / DOCX reports for clients and audits.</p>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up" data-aos-delay="120">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-2xl bg-slate-50 border border-slate-200 grid place-items-center">
+              <i data-lucide="mail" class="h-5 w-5 text-slate-900"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Email Send</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700">Configure SMTP and send reports with attachments from inside the app.</p>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-2xl bg-slate-50 border border-slate-200 grid place-items-center">
+              <i data-lucide="history" class="h-5 w-5 text-slate-900"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Report History</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700">Track sent reports with timestamps and delivery history per project.</p>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up" data-aos-delay="60">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-2xl bg-slate-50 border border-slate-200 grid place-items-center">
+              <i data-lucide="hard-drive" class="h-5 w-5 text-slate-900"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Local Persistence</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700">All data stored on your device in a local SQLite vault directory.</p>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 p-6 shadow-sm" data-aos="fade-up" data-aos-delay="120">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-2xl bg-slate-50 border border-slate-200 grid place-items-center">
+              <i data-lucide="wifi-off" class="h-5 w-5 text-slate-900"></i>
+            </div>
+            <div class="font-extrabold text-slate-900">Offline-ready</div>
+          </div>
+          <p class="mt-3 text-sm text-slate-700">No cloud dependency — ideal for sensitive engagements and air-gapped work.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Downloads -->
+    <section id="downloads" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div class="glass rounded-3xl border border-slate-200/70 shadow-sm p-5 sm:p-6" data-aos="fade-up">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div>
+            <h2 class="text-3xl font-extrabold tracking-tight text-slate-900">Downloads</h2>
+            <p class="mt-2 text-slate-700">
+              Fully open-source. Desktop installers are available now.
+            </p>
+            <a href="https://github.com/AATHILDUCKY/ducky-pwn-docs.git" target="_blank" rel="noreferrer"
+               class="mt-3 inline-flex items-center gap-2 text-sm font-bold text-sky-700 hover:text-sky-800 transition">
+              <i data-lucide="github" class="h-4 w-4"></i>
+              View source on GitHub
+            </a>
+            <div class="mt-4 flex flex-wrap gap-2 text-xs">
+              <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Stable</span>
+              <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Beta</span>
+              <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Nightly</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <button id="downloadToggle" type="button" aria-controls="downloadPanel" aria-expanded="false" class="focus-ring inline-flex items-center gap-2 rounded-2xl bg-slate-900 text-white px-5 py-3 text-sm font-bold shadow-sm hover:bg-slate-800 transition">
+              <i data-lucide="download" class="h-4 w-4"></i>
+              <span id="downloadToggleLabel">Show download options</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="downloadPanel" class="mt-6 max-h-0 opacity-0 -translate-y-1 pointer-events-none overflow-hidden transition-all duration-500 ease-out" aria-hidden="true">
+          <div class="grid lg:grid-cols-[1.2fr_0.8fr] gap-4">
+            <div>
+              <div class="grid sm:grid-cols-2 gap-4">
+                <a href="https://github.com/AATHILDUCKY/ducky-pwn-docs/releases/download/ducky-pwn-docs/DuckyPwnDocs.0.0.0.exe" download data-confirm="Download Windows (.exe)?" class="downloadLink focus-ring group relative rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition">
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                      <div class="h-11 w-11 rounded-xl bg-slate-900 text-white grid place-items-center">
+                        <i data-lucide="monitor" class="h-5 w-5"></i>
+                      </div>
+                      <div class="text-sm font-extrabold text-slate-900">Windows</div>
+                    </div>
+                    <div class="h-8 w-8 rounded-xl bg-slate-100 text-slate-700 grid place-items-center">
+                      <i data-lucide="download" class="h-4 w-4"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">.exe</span>
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">x64</span>
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">Installer</span>
+                  </div>
+                </a>
+
+                <a href="https://github.com/AATHILDUCKY/ducky-pwn-docs/releases/download/ducky-pwn-docs/ducky-pwn-docs_0.0.0_amd64.deb" download data-confirm="Download Linux (.deb)?" class="downloadLink focus-ring group relative rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition">
+                  <span class="absolute right-3 top-3 rounded-full bg-amber-500 text-white px-2 py-1 text-[10px] font-extrabold tracking-wide">Recommended</span>
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                      <div class="h-11 w-11 rounded-xl bg-amber-500 text-white grid place-items-center">
+                        <i data-lucide="package" class="h-5 w-5"></i>
+                      </div>
+                      <div class="text-sm font-extrabold text-slate-900">Debian / Ubuntu</div>
+                    </div>
+                    <div class="h-8 w-8 rounded-xl bg-amber-50 text-amber-700 grid place-items-center">
+                      <i data-lucide="download" class="h-4 w-4"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                    <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-1 font-semibold text-amber-700">.deb</span>
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">x64</span>
+                    <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-1 font-semibold text-amber-700">APT</span>
+                  </div>
+                </a>
+
+                <a href="https://github.com/AATHILDUCKY/ducky-pwn-docs/releases/download/ducky-pwn-docs/DuckyPwnDocs-0.0.0.AppImage" download data-confirm="Download Linux (.AppImage)?" class="downloadLink focus-ring group rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition">
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                      <div class="h-11 w-11 rounded-xl bg-teal-600 text-white grid place-items-center">
+                        <i data-lucide="box" class="h-5 w-5"></i>
+                      </div>
+                      <div class="text-sm font-extrabold text-slate-900">AppImage</div>
+                    </div>
+                    <div class="h-8 w-8 rounded-xl bg-teal-50 text-teal-700 grid place-items-center">
+                      <i data-lucide="download" class="h-4 w-4"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                    <span class="inline-flex items-center rounded-full bg-teal-50 px-2 py-1 font-semibold text-teal-700">.AppImage</span>
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">x64</span>
+                    <span class="inline-flex items-center rounded-full bg-teal-50 px-2 py-1 font-semibold text-teal-700">Portable</span>
+                  </div>
+                </a>
+
+                <a href="https://github.com/AATHILDUCKY/ducky-pwn-docs/releases/download/ducky-pwn-docs/ducky-pwn-docs_0.0.0_amd64.snap" download data-confirm="Download Linux (.snap)?" class="downloadLink focus-ring group rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition">
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                      <div class="h-11 w-11 rounded-xl bg-sky-600 text-white grid place-items-center">
+                        <i data-lucide="layers" class="h-5 w-5"></i>
+                      </div>
+                      <div class="text-sm font-extrabold text-slate-900">Snap</div>
+                    </div>
+                    <div class="h-8 w-8 rounded-xl bg-sky-50 text-sky-700 grid place-items-center">
+                      <i data-lucide="download" class="h-4 w-4"></i>
+                    </div>
+                  </div>
+                  <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                    <span class="inline-flex items-center rounded-full bg-sky-50 px-2 py-1 font-semibold text-sky-700">.snap</span>
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 font-semibold text-slate-700">x64</span>
+                    <span class="inline-flex items-center rounded-full bg-sky-50 px-2 py-1 font-semibold text-sky-700">Store</span>
+                  </div>
+                </a>
+              </div>
+              <p class="mt-4 text-xs text-slate-600">All builds are hosted on GitHub Releases.</p>
+            </div>
+
+            <div class="rounded-3xl border border-slate-200 bg-gradient-to-br from-white/90 via-white/70 to-slate-50/60 p-5 shadow-sm">
+              <div class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Release summary</div>
+              <div class="mt-2">
+                <span class="inline-flex items-center rounded-full border border-slate-200 bg-white/70 px-2.5 py-1 text-[10px] font-extrabold tracking-wide text-slate-700">Stable release</span>
+              </div>
+              <p class="mt-2 text-sm text-slate-700">Choose the build that matches your OS and install preference.</p>
+
+              <div class="mt-4 space-y-3 text-sm">
+                <div class="flex items-start gap-3">
+                  <div class="h-8 w-8 rounded-xl bg-slate-900 text-white grid place-items-center">
+                    <i data-lucide="monitor" class="h-4 w-4"></i>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-slate-900">Windows .exe</div>
+                    <div class="text-xs text-slate-600">Installer for most Windows users.</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="h-8 w-8 rounded-xl bg-amber-500 text-white grid place-items-center">
+                    <i data-lucide="package" class="h-4 w-4"></i>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-slate-900">Debian .deb</div>
+                    <div class="text-xs text-slate-600">Best for APT-based Linux distros.</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="h-8 w-8 rounded-xl bg-teal-600 text-white grid place-items-center">
+                    <i data-lucide="box" class="h-4 w-4"></i>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-slate-900">AppImage</div>
+                    <div class="text-xs text-slate-600">Portable, no install required.</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="h-8 w-8 rounded-xl bg-sky-600 text-white grid place-items-center">
+                    <i data-lucide="layers" class="h-4 w-4"></i>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-slate-900">Snap</div>
+                    <div class="text-xs text-slate-600">Store-friendly, auto-updating package.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 rounded-2xl border border-dashed border-slate-200 bg-white/60 px-3 py-2 text-xs text-slate-600">
+                Integrity checks (SHA256) will be published alongside releases.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 grid md:grid-cols-2 gap-4">
+          <div class="rounded-2xl border border-slate-200 bg-white/60 p-5">
+            <div class="font-extrabold text-slate-900">Planned public landing page</div>
+            <p class="mt-2 text-sm text-slate-700">
+              A web download portal with versioned releases + checksums is on the roadmap.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white/60 p-5">
+            <div class="font-extrabold text-slate-900">Open source</div>
+            <p class="mt-2 text-sm text-slate-700">
+              License: MIT • Built for security teams and solo hackers alike.
+            </p>
+          </div>
+        </div>
+        <div class="mt-4 rounded-2xl border border-dashed border-slate-200 bg-white/50 px-4 py-3 text-xs text-slate-600">
+          Checksums (SHA256) will be added for each release build.
+        </div>
+      </div>
+    </section>
+
+    <!-- Docs -->
+    <section id="docs" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid lg:grid-cols-2 gap-6 items-start">
+        <div class="glass rounded-3xl border border-slate-200/70 shadow-sm p-5 sm:p-6" data-aos="fade-up">
+          <h2 class="text-3xl font-extrabold tracking-tight text-slate-900">Run locally (dev)</h2>
+          <p class="mt-2 text-slate-700">Start Vite + Electron for development.</p>
+          <div class="mt-4 flex flex-wrap gap-2 text-xs">
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Node 18+</span>
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Electron</span>
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Vite</span>
+          </div>
+
+          <div class="mt-5 space-y-4">
+            <div class="rounded-2xl border border-slate-200 bg-slate-950 text-slate-50 p-4 overflow-auto">
+              <div class="text-xs font-semibold text-slate-300">1) Install dependencies</div>
+              <pre class="mt-2 text-sm leading-relaxed"><code>npm install</code></pre>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-slate-950 text-slate-50 p-4 overflow-auto">
+              <div class="text-xs font-semibold text-slate-300">2) Start Electron + Vite</div>
+              <pre class="mt-2 text-sm leading-relaxed"><code>npm run electron:dev</code></pre>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+              <button data-copy="npm install" class="copyBtn focus-ring inline-flex items-center gap-2 rounded-xl bg-white/70 border border-slate-200 px-4 py-2 text-sm font-bold text-slate-900 hover:bg-white transition">
+                <i data-lucide="copy" class="h-4 w-4"></i> Copy install
+              </button>
+              <button data-copy="npm run electron:dev" class="copyBtn focus-ring inline-flex items-center gap-2 rounded-xl bg-white/70 border border-slate-200 px-4 py-2 text-sm font-bold text-slate-900 hover:bg-white transition">
+                <i data-lucide="copy" class="h-4 w-4"></i> Copy dev command
+              </button>
+            </div>
+
+            <p class="text-xs text-slate-600">
+              You can paste these commands into your terminal inside the project folder.
+            </p>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 shadow-sm p-5 sm:p-6" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="text-2xl font-extrabold tracking-tight text-slate-900">Build production (desktop)</h3>
+          <p class="mt-2 text-slate-700">Build the renderer and package the app.</p>
+          <div class="mt-4 flex flex-wrap gap-2 text-xs">
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Windows</span>
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">Linux</span>
+            <span class="rounded-full border border-slate-200 bg-white/70 px-3 py-1 font-semibold text-slate-700">macOS</span>
+          </div>
+
+          <div class="mt-5 space-y-4">
+            <div class="rounded-2xl border border-slate-200 bg-slate-950 text-slate-50 p-4 overflow-auto">
+              <div class="text-xs font-semibold text-slate-300">Build + package</div>
+              <pre class="mt-2 text-sm leading-relaxed"><code>npm run build
+npx electron-builder</code></pre>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white/60 p-5">
+              <div class="font-extrabold text-slate-900">Linux (.deb)</div>
+              <pre class="mt-2 text-sm text-slate-800"><code>npx electron-builder</code></pre>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white/60 p-5">
+              <div class="font-extrabold text-slate-900">Windows (.exe)</div>
+              <p class="mt-1 text-sm text-slate-700">Build on Windows (recommended):</p>
+              <pre class="mt-2 text-sm text-slate-800"><code>npx electron-builder --win nsis</code></pre>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white/60 p-5">
+              <div class="font-extrabold text-slate-900">macOS (.dmg / .zip)</div>
+              <pre class="mt-2 text-sm text-slate-800"><code>npx electron-builder --mac</code></pre>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+              <button data-copy="npm run build\nnpx electron-builder" class="copyBtn focus-ring inline-flex items-center gap-2 rounded-xl bg-white/70 border border-slate-200 px-4 py-2 text-sm font-bold text-slate-900 hover:bg-white transition">
+                <i data-lucide="copy" class="h-4 w-4"></i> Copy build cmds
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data storage -->
+    <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="glass rounded-3xl border border-slate-200/70 shadow-sm p-5 sm:p-6" data-aos="fade-up">
+          <h2 class="text-2xl font-extrabold tracking-tight text-slate-900">Data storage</h2>
+          <p class="mt-2 text-slate-700">All data is stored locally in SQLite.</p>
+
+          <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-950 text-slate-50 p-4 overflow-auto">
+            <pre class="text-sm leading-relaxed"><code>${app.getPath('userData')}/ducky-pwn-docs/vault.db</code></pre>
+          </div>
+
+          <p class="mt-4 text-slate-700">Uploaded assets are stored alongside the database in:</p>
+          <div class="mt-2 rounded-2xl border border-slate-200 bg-slate-950 text-slate-50 p-4 overflow-auto">
+            <pre class="text-sm leading-relaxed"><code>${app.getPath('userData')}/ducky-pwn-docs/assets</code></pre>
+          </div>
+          <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
+            <div class="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 font-semibold text-slate-700">Local path only</div>
+            <div class="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 font-semibold text-slate-700">No cloud sync</div>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl border border-slate-200/70 shadow-sm p-5 sm:p-6" data-aos="fade-up" data-aos-delay="100">
+          <h2 class="text-2xl font-extrabold tracking-tight text-slate-900">SMTP / Email</h2>
+          <p class="mt-2 text-slate-700">
+            Configure SMTP settings inside the Profile page. Send finding reports with attachments.
+          </p>
+
+          <div class="mt-4 rounded-2xl border border-slate-200 bg-white/60 p-5">
+            <div class="flex items-center gap-2 font-extrabold text-slate-900">
+              <i data-lucide="shield-alert" class="h-5 w-5 text-sky-700"></i>
+              Security note
+            </div>
+            <p class="mt-2 text-sm text-slate-700">
+              Never commit real SMTP credentials. Use <code class="font-semibold">.env.example</code> as a template and keep secrets out of git.
+            </p>
+          </div>
+
+          <div class="mt-4 rounded-2xl border border-slate-200 bg-white/60 p-5">
+            <div class="font-extrabold text-slate-900">Report formats</div>
+            <ul class="mt-2 text-sm text-slate-700 space-y-2">
+              <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 mt-0.5 text-teal-600"></i> PDF: professional printable report</li>
+              <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 mt-0.5 text-teal-600"></i> HTML: email-friendly layout</li>
+              <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 mt-0.5 text-teal-600"></i> DOCX: editable report for Office/Google Docs</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section id="roadmap" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div class="glass rounded-3xl border border-slate-200/70 shadow-sm p-5 sm:p-6" data-aos="fade-up">
+        <h2 class="text-3xl font-extrabold tracking-tight text-slate-900">Roadmap</h2>
+        <div class="mt-5 grid md:grid-cols-3 gap-4">
+          <div class="rounded-2xl border border-slate-200 bg-white/60 p-5">
+            <div class="font-extrabold text-slate-900">Download portal</div>
+            <p class="mt-2 text-sm text-slate-700">Public website with versioned builds, checksums, and release notes.</p>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white/60 p-5">
+            <div class="font-extrabold text-slate-900">AppImage packaging</div>
+            <p class="mt-2 text-sm text-slate-700">Better Linux distribution and smoother install experience.</p>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white/60 p-5">
+            <div class="font-extrabold text-slate-900">Update channels</div>
+            <p class="mt-2 text-sm text-slate-700">Simple, secure update channels for stable and beta releases.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Security -->
+    <section id="security" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-2 pb-14">
+      <div class="glass rounded-3xl border border-slate-200/70 shadow-sm p-5 sm:p-6" data-aos="fade-up">
+        <div class="flex items-center gap-3">
+          <div class="h-12 w-12 rounded-2xl bg-sky-50 border border-sky-100 grid place-items-center">
+            <i data-lucide="shield-check" class="h-6 w-6 text-sky-700"></i>
+          </div>
+          <div>
+            <h2 class="text-3xl font-extrabold tracking-tight text-slate-900">Security</h2>
+            <p class="mt-1 text-slate-700">Keep secrets out of git. Store everything locally. Ship clean builds.</p>
+          </div>
+        </div>
+
+        <div class="mt-6 grid md:grid-cols-2 gap-4">
+          <div class="rounded-2xl border border-slate-200 bg-white/60 p-5">
+            <div class="font-extrabold text-slate-900">Do not commit secrets</div>
+            <p class="mt-2 text-sm text-slate-700">
+              Remove SMTP credentials from any tracked files before publishing.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white/60 p-5">
+            <div class="font-extrabold text-slate-900">Local-first design</div>
+            <p class="mt-2 text-sm text-slate-700">
+              SQLite vault and assets remain on your machine — ideal for sensitive engagements.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="pb-8">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="glass border border-slate-200/70 rounded-3xl shadow-sm p-5 sm:p-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div class="font-extrabold text-slate-900">Ducky Pwn Docs</div>
+            <div class="mt-1 text-sm text-slate-700">
+              Local-first vulnerability management & reporting — an alternative for Dradis Framework.
+            </div>
+            <div class="mt-2 text-xs text-slate-600">Created by AATHILDUCKY • License: MIT</div>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <a href="#top" class="focus-ring inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white/70 px-4 py-2 text-sm font-bold text-slate-900 hover:bg-white transition">
+              <i data-lucide="arrow-up" class="h-4 w-4"></i> Back to top
+            </a>
+            <a href="#downloads" class="downloadTrigger focus-ring inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white px-4 py-2 text-sm font-bold hover:bg-slate-800 transition">
+              <i data-lucide="download" class="h-4 w-4"></i> Downloads
+            </a>
+          </div>
+        </div>
+
+        <div class="mt-6 border-t border-slate-200 pt-4 text-xs text-slate-600 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div>© <span id="year"></span> Ducky Pwn Docs. All rights reserved.</div>
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1 rounded-full bg-teal-50 text-teal-700 border border-teal-200 px-3 py-1 font-semibold">
+              <span class="h-2 w-2 rounded-full bg-teal-500"></span> Offline-ready
+            </span>
+            <span class="inline-flex items-center gap-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200 px-3 py-1 font-semibold">
+              <i data-lucide="database" class="h-3.5 w-3.5"></i> SQLite
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 hidden">
+    <div class="glass border border-slate-200 rounded-2xl shadow-lg px-4 py-3 text-sm font-bold text-slate-900 flex items-center gap-2">
+      <i data-lucide="check" class="h-4 w-4 text-teal-600"></i>
+      <span id="toastText">Copied!</span>
+    </div>
+  </div>
+
+  <!-- Download confirm modal -->
+  <div id="downloadModal" class="fixed inset-0 z-50 hidden">
+    <div id="downloadModalBackdrop" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"></div>
+    <div class="relative mx-auto mt-24 max-w-lg px-4">
+      <div class="glass border border-slate-200 rounded-3xl shadow-xl p-5 sm:p-6">
+        <div class="flex items-center gap-3">
+          <div class="h-11 w-11 rounded-2xl bg-slate-900 text-white grid place-items-center">
+            <i data-lucide="download" class="h-5 w-5"></i>
+          </div>
+          <div>
+            <div class="text-xs uppercase tracking-wide text-slate-500 font-semibold">Confirm download</div>
+            <div id="downloadModalTitle" class="text-lg font-extrabold text-slate-900">Download</div>
+          </div>
+        </div>
+        <p id="downloadModalDesc" class="mt-3 text-sm text-slate-700">
+          You are about to download a release build.
+        </p>
+        <div class="mt-4 flex items-center justify-end gap-3">
+          <button id="downloadCancel" type="button" class="focus-ring inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white/70 px-4 py-2 text-sm font-bold text-slate-900 hover:bg-white transition">
+            Cancel
+          </button>
+          <button id="downloadConfirm" type="button" class="focus-ring inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white px-4 py-2 text-sm font-bold hover:bg-slate-800 transition">
+            Download now
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Init icon set
+      if (window.lucide?.createIcons) {
+        window.lucide.createIcons();
+      }
+
+      // AOS animations
+      if (window.AOS?.init) {
+        window.AOS.init({
+          once: true,
+          duration: 650,
+          easing: "ease-out-cubic",
+          offset: 80
+        });
+      }
+
+      // Year
+      const yearEl = document.getElementById("year");
+      if (yearEl) {
+        yearEl.textContent = new Date().getFullYear();
+      }
+
+      // Copy buttons
+      const toast = document.getElementById("toast");
+      const toastText = document.getElementById("toastText");
+      let toastTimer = null;
+
+      function showToast(text) {
+        if (!toast || !toastText) return;
+        toastText.textContent = text || "Copied!";
+        toast.classList.remove("hidden");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.add("hidden"), 1600);
+      }
+
+      document.querySelectorAll(".copyBtn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const val = btn.getAttribute("data-copy") || "";
+          try {
+            await navigator.clipboard.writeText(val);
+            showToast("Copied to clipboard");
+          } catch (e) {
+            // fallback
+            const ta = document.createElement("textarea");
+            ta.value = val;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            ta.remove();
+            showToast("Copied (fallback)");
+          }
+        });
+      });
+
+      // Video slider
+      const videoTrack = document.getElementById("videoTrack");
+      const videoSlides = Array.from(document.querySelectorAll(".videoSlide"));
+      const videoDots = Array.from(document.querySelectorAll(".videoDot"));
+      const videoPrev = document.getElementById("videoPrev");
+      const videoNext = document.getElementById("videoNext");
+      let videoIndex = 0;
+
+      function updateVideoSlider(nextIndex) {
+        if (!videoTrack || videoSlides.length === 0) return;
+        const total = videoSlides.length;
+        videoIndex = (nextIndex + total) % total;
+        videoTrack.style.transform = `translateX(-${videoIndex * 100}%)`;
+        videoDots.forEach((dot, idx) => {
+          dot.classList.toggle("bg-slate-900", idx === videoIndex);
+          dot.classList.toggle("bg-slate-300", idx !== videoIndex);
+        });
+        videoSlides.forEach((slide, idx) => {
+          const video = slide.querySelector("video");
+          if (video && idx !== videoIndex) {
+            video.pause();
+          }
+        });
+      }
+
+      if (videoPrev) {
+        videoPrev.addEventListener("click", () => updateVideoSlider(videoIndex - 1));
+      }
+      if (videoNext) {
+        videoNext.addEventListener("click", () => updateVideoSlider(videoIndex + 1));
+      }
+      videoDots.forEach(dot => {
+        dot.addEventListener("click", () => {
+          const idx = Number(dot.getAttribute("data-video-dot") || 0);
+          updateVideoSlider(idx);
+        });
+      });
+      updateVideoSlider(0);
+
+      // Download panel toggle
+      const downloadPanel = document.getElementById("downloadPanel");
+      const downloadToggle = document.getElementById("downloadToggle");
+      const downloadToggleLabel = document.getElementById("downloadToggleLabel");
+      const downloadTriggers = document.querySelectorAll(".downloadTrigger");
+      const downloadLinks = document.querySelectorAll(".downloadLink");
+
+      function setDownloadToggleState(isOpen) {
+        if (downloadToggle) {
+          downloadToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        }
+        if (downloadToggleLabel) {
+          downloadToggleLabel.textContent = isOpen ? "Hide download options" : "Show download options";
+        }
+      }
+
+    const downloadPanelOpenClasses = ["max-h-[2000px]", "opacity-100", "translate-y-0", "pointer-events-auto"];
+    const downloadPanelClosedClasses = ["max-h-0", "opacity-0", "-translate-y-1", "pointer-events-none"];
+
+    function setDownloadPanelState(isOpen) {
+      if (!downloadPanel) return;
+      downloadPanel.classList.remove(...downloadPanelOpenClasses, ...downloadPanelClosedClasses);
+      downloadPanel.classList.add(...(isOpen ? downloadPanelOpenClasses : downloadPanelClosedClasses));
+      downloadPanel.setAttribute("aria-hidden", isOpen ? "false" : "true");
+      setDownloadToggleState(isOpen);
+    }
+
+    function openDownloads() {
+      setDownloadPanelState(true);
+    }
+
+    function toggleDownloads() {
+      if (!downloadPanel) return;
+      const isOpen = downloadPanel.getAttribute("aria-hidden") === "false";
+      setDownloadPanelState(!isOpen);
+    }
+
+      downloadTriggers.forEach(trigger => {
+        trigger.addEventListener("click", () => {
+          openDownloads();
+        });
+      });
+
+      if (downloadToggle) {
+        downloadToggle.addEventListener("click", toggleDownloads);
+      }
+
+      if (window.location.hash === "#downloads") {
+        openDownloads();
+      }
+
+      // Download confirmation modal
+      const downloadModal = document.getElementById("downloadModal");
+      const downloadModalBackdrop = document.getElementById("downloadModalBackdrop");
+      const downloadModalTitle = document.getElementById("downloadModalTitle");
+      const downloadModalDesc = document.getElementById("downloadModalDesc");
+      const downloadCancel = document.getElementById("downloadCancel");
+      const downloadConfirm = document.getElementById("downloadConfirm");
+      let pendingDownloadHref = "";
+
+      function openDownloadModal(title, desc, href) {
+        if (!downloadModal || !downloadModalTitle || !downloadModalDesc) return;
+        pendingDownloadHref = href || "";
+        downloadModalTitle.textContent = title || "Download";
+        downloadModalDesc.textContent = desc || "You are about to download a release build.";
+        downloadModal.classList.remove("hidden");
+      }
+
+      function closeDownloadModal() {
+        if (!downloadModal) return;
+        downloadModal.classList.add("hidden");
+        pendingDownloadHref = "";
+      }
+
+      downloadLinks.forEach(link => {
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          const title = link.querySelector(".text-sm.font-extrabold")?.textContent || "Download";
+          const ext = link.querySelector(".mt-3 .font-semibold")?.textContent || "";
+          const desc = ext ? `You are about to download the ${ext} build.` : "You are about to download a release build.";
+          openDownloadModal(title, desc, link.href);
+        });
+      });
+
+      if (downloadCancel) {
+        downloadCancel.addEventListener("click", closeDownloadModal);
+      }
+      if (downloadModalBackdrop) {
+        downloadModalBackdrop.addEventListener("click", closeDownloadModal);
+      }
+      if (downloadConfirm) {
+        downloadConfirm.addEventListener("click", () => {
+          if (pendingDownloadHref) {
+            window.location.href = pendingDownloadHref;
+          }
+          closeDownloadModal();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
